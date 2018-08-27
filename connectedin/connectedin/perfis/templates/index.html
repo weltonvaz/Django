@@ -1,12 +1,50 @@
-<!-- connectedin/perfis/templates/index.html -->
+<!-- connectedin/perfis/template/index.html -->
 
-<!DOCTYPE html>
-<html lang="pt-br">
-    <head>
-        <meta charset="utf-8">
-        <title>ConnectedIn</title>
-    </head>
-    <body>
-        <h1>Bem-vindo ao Connectedin</h1>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block body %}
+<div class="col-lg-12">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Todos os Perfis</strong>
+        </div>
+        {% if perfis %}
+        <ul>
+            {% for perfil in perfis %}
+            <li>
+                    <a href="{% url 'exibir' perfil.id%}">{{ perfil.nome }}</a> / {{ perfil.email }}
+            </li>
+              {% endfor %}
+          </ul>
+        {% else %}
+              <p>Nenhum Perfil encontrado</p>
+        {% endif %}
+    </div>
+
+    <!-- bloco novo de código que exibe os convites -->
+
+    <div class="panel panel-default">
+        {% if perfil_logado.convites_recebidos.count %}
+            <div class="panel-heading">
+                <strong>Convites aguardando aprovação</strong>
+            </div>
+            <ul class="list-group">
+                {% for convite in perfil_logado.convites_recebidos.all %}
+                    <li class="list-group-item">
+                            {{ convite.solicitante.nome }}
+                            <a href="#" class="pull-right">aceitar</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="panel-body">
+                <p>Nenhum convite recebido :(</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- fim do bloco novo -->
+
+</div>
+{% endblock %}
